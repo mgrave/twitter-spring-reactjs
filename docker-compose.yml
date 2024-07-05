@@ -104,7 +104,9 @@ services:
                     - prometheus
 
     eureka-server:
-        image: merikbest/twitter-spring-reactjs:eureka-server
+        build:
+           context: ./eureka-server
+           dockerfile: Dockerfile 
         container_name: eureka-server
         hostname: eureka-server
         environment:
@@ -118,7 +120,9 @@ services:
             - zipkin
 
     config-server:
-        image: merikbest/twitter-spring-reactjs:config-server
+        build:
+           context: ./config-server
+           dockerfile: Dockerfile 
         container_name: config-server
         hostname: config-server
         environment:
@@ -132,8 +136,10 @@ services:
             - zipkin
             - eureka-server
 
-    api-gateway:
-        image: merikbest/twitter-spring-reactjs:api-gateway
+    api-gateway:   
+        build:
+           context: ./api-gateway
+           dockerfile: Dockerfile    
         container_name: api-gateway
         hostname: api-gateway
         environment:

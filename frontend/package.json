@@ -29,6 +29,7 @@
     "@types/sockjs-client": "^1.5.1",
     "@types/yup": "^0.29.11",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
+    "ajv": "^8.16.0",
     "axios": "^0.21.1",
     "bowser": "^2.11.0",
     "caniuse-lite": "^1.0.30001299",
