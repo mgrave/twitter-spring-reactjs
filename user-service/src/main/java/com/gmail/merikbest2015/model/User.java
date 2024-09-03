@@ -9,7 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,23 +21,24 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"id", "email"})
 @Table(name = "users")
 public class User {
+    private static final String USERS_SEQ = "users_seq";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
-    @SequenceGenerator(name = "users_seq", sequenceName = "users_seq", initialValue = 100, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = USERS_SEQ)
+    @SequenceGenerator(name = USERS_SEQ, sequenceName = USERS_SEQ, initialValue = 100, allocationSize = 1)
     private Long id;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-
-    @Column(name = "password")
-    private String password;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "location")
     private String location;
@@ -51,11 +52,14 @@ public class User {
     @Column(name = "country_code")
     private String countryCode;
 
-    @Column(name = "phone")
-    private Long phone;
-
     @Column(name = "country")
     private String country;
+
+    @Column(name = "phone_code")
+    private String phoneCode;
+
+    @Column(name = "phone_number")
+    private Long phoneNumber;
 
     @Column(name = "gender")
     private String gender;

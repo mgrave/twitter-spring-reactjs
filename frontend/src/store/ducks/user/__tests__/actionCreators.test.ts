@@ -1,5 +1,6 @@
 import { testAction } from "../../../../util/test-utils/test-helper";
 import {
+    deletePhoneNumber,
     fetchPinTweet,
     fetchReadMessages,
     fetchSignIn,
@@ -11,6 +12,7 @@ import {
     processUserToMuteList,
     resetMentions,
     resetNotifications,
+    resetPhoneNumber,
     setBackgroundColor,
     setColorScheme,
     setCountry,
@@ -171,6 +173,14 @@ describe("user actions", () => {
         type: UserActionsType.RESET_MENTIONS
     });
 
+    testAction(deletePhoneNumber, deletePhoneNumber(), {
+        type: UserActionsType.DELETE_PHONE_NUMBER
+    });
+
+    testAction(resetPhoneNumber, resetPhoneNumber(), {
+        type: UserActionsType.RESET_PHONE_NUMBER
+    });
+
     testAction(updateUsername, updateUsername({ username: "text" } as SettingsRequest), {
         type: UserActionsType.UPDATE_USERNAME,
         payload: { username: "text" } as SettingsRequest
@@ -181,9 +191,9 @@ describe("user actions", () => {
         payload: { email: "test@test.test" } as SettingsRequest
     });
 
-    testAction(updatePhone, updatePhone({ phone: 12345 } as SettingsRequest), {
+    testAction(updatePhone, updatePhone({ phoneNumber: 12345 } as SettingsRequest), {
         type: UserActionsType.UPDATE_PHONE,
-        payload: { phone: 12345 } as SettingsRequest
+        payload: { phoneNumber: 12345 } as SettingsRequest
     });
 
     testAction(updateCountry, updateCountry({ country: "test" } as SettingsRequest), {
@@ -226,9 +236,9 @@ describe("user actions", () => {
         payload: "test"
     });
 
-    testAction(setPhone, setPhone({ countryCode: "text", phone: 12345 }), {
+    testAction(setPhone, setPhone({ phoneCode: "+1", phoneNumber: 12345 }), {
         type: UserActionsType.SET_PHONE,
-        payload: { countryCode: "text", phone: 12345 }
+        payload: { phoneCode: "+1", phoneNumber: 12345 }
     });
 
     testAction(setCountry, setCountry("test"), {

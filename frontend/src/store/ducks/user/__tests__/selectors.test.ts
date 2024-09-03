@@ -13,7 +13,6 @@ import {
     selectUserIsError,
     selectUserIsLoaded,
     selectUserIsLoading,
-    selectUserIsSuccess,
     selectUserPinnedTweetId,
     selectUserProfileAvatar,
     selectUserProfileCountry,
@@ -24,7 +23,7 @@ import {
     selectUserProfileGender,
     selectUserProfileLanguage,
     selectUserProfileLocation,
-    selectUserProfilePhone,
+    selectUserProfilePhoneNumber,
     selectUserProfileRegistrationDate,
     selectUserProfileUsername,
     selectUserProfileWebsite,
@@ -110,7 +109,7 @@ describe("user selectors:", () => {
 
     describe("selectUserProfilePhone", () => {
         it("should return phone number", () => {
-            expect(selectUserProfilePhone(createMockRootState())).toBe(666966623);
+            expect(selectUserProfilePhoneNumber(createMockRootState())).toBe(666966623);
         });
     });
 
@@ -122,7 +121,7 @@ describe("user selectors:", () => {
 
     describe("selectUserProfileCountry", () => {
         it("should return country string", () => {
-            expect(selectUserProfileCountry(createMockRootState())).toBe("UA");
+            expect(selectUserProfileCountry(createMockRootState())).toBe("Ukraine");
         });
     });
 
@@ -189,12 +188,6 @@ describe("user selectors:", () => {
     describe("selectUserStatus", () => {
         it("should return correct result", () => {
             expect(selectUserStatus(createMockRootState())).toBe(LoadingStatus.LOADING);
-        });
-    });
-
-    describe("selectUserIsSuccess", () => {
-        it("should return correct result", () => {
-            expect(selectUserIsSuccess(createMockRootState(LoadingStatus.SUCCESS))).toBe(true);
         });
     });
 

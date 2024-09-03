@@ -2,6 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { AxiosResponse } from "axios";
 
 import {
+    resetPhoneNumber,
     setBackgroundColor,
     setColorScheme,
     setCountry,
@@ -78,7 +79,7 @@ import {
 } from "../notifications/actionCreators";
 import { setBlockedUser, setMutedUser } from "../blockedAndMutedUsers/actionCreators";
 import { HOME, PROFILE } from "../../../constants/path-constants";
-import { ChangePhoneResponse } from "./contracts/state";
+import { UserPhoneResponse } from "./contracts/state";
 import {
     setBlockedTweetAdditionalInfo,
     setFollowedTweetAdditionalInfo,
@@ -96,6 +97,7 @@ import {
     setFollowToListTweetsState,
     setMutedToListTweetsState
 } from "../list/actionCreators";
+import { setOpenSnackBar } from "../actionSnackbar/actionCreators";
 
 export function* updateUserDataRequest({ payload }: UpdateUserDataActionInterface) {
     try {
@@ -198,6 +200,7 @@ export function* updateUsernameRequest({ payload }: UpdateUsernameActionInterfac
         yield put(setUserLoadingStatus(LoadingStatus.LOADING));
         const response: AxiosResponse<string> = yield call(UserSettingsApi.updateUsername, payload);
         yield put(setUsername(response.data));
+        yield put(setOpenSnackBar("Username updated"));
     } catch (e) {
         yield put(setUserLoadingStatus(LoadingStatus.ERROR));
     }
@@ -209,16 +212,28 @@ export function* updateEmailRequest({ payload }: UpdateEmailActionInterface) {
         const item: AxiosResponse<AuthenticationResponse> = yield call(UserSettingsApi.updateEmail, payload);
         localStorage.setItem(TOKEN, item.data.token);
         yield put(setEmail(item.data.user.email));
+        yield put(setOpenSnackBar("Email updated"));
     } catch (e) {
         yield put(setUserLoadingStatus(LoadingStatus.ERROR));
     }
 }
 
-export function* updatePhoneRequest({ payload }: UpdatePhoneActionInterface) {
+export function* updatePhoneNumberRequest({ payload }: UpdatePhoneActionInterface) {
     try {
         yield put(setUserLoadingStatus(LoadingStatus.LOADING));
-        const { data }: AxiosResponse<ChangePhoneResponse> = yield call(UserSettingsApi.updatePhone, payload);
+        const { data }: AxiosResponse<UserPhoneResponse> = yield call(UserSettingsApi.updatePhoneNumber, payload);
         yield put(setPhone(data));
+    } catch (e) {
+        yield put(setUserLoadingStatus(LoadingStatus.ERROR));
+    }
+}
+
+export function* deletePhoneNumberRequest() {
+    try {
+        yield put(setUserLoadingStatus(LoadingStatus.LOADING));
+        yield call(UserSettingsApi.deletePhoneNumber);
+        yield put(resetPhoneNumber());
+        yield put(setOpenSnackBar("Phone removed"));
     } catch (e) {
         yield put(setUserLoadingStatus(LoadingStatus.ERROR));
     }
@@ -229,6 +244,7 @@ export function* updateCountryRequest({ payload }: UpdateCountryActionInterface)
         yield put(setUserLoadingStatus(LoadingStatus.LOADING));
         const response: AxiosResponse<string> = yield call(UserSettingsApi.updateCountry, payload);
         yield put(setCountry(response.data));
+        yield put(setOpenSnackBar("Country updated"));
     } catch (e) {
         yield put(setUserLoadingStatus(LoadingStatus.ERROR));
     }
@@ -239,6 +255,7 @@ export function* updateGenderRequest({ payload }: UpdateGenderActionInterface) {
         yield put(setUserLoadingStatus(LoadingStatus.LOADING));
         const response: AxiosResponse<string> = yield call(UserSettingsApi.updateGender, payload);
         yield put(setGender(response.data));
+        yield put(setOpenSnackBar("Gender updated"));
     } catch (e) {
         yield put(setUserLoadingStatus(LoadingStatus.ERROR));
     }
@@ -249,6 +266,7 @@ export function* updateLanguageRequest({ payload }: UpdateLanguageActionInterfac
         yield put(setUserLoadingStatus(LoadingStatus.LOADING));
         const response: AxiosResponse<string> = yield call(UserSettingsApi.updateLanguage, payload);
         yield put(setLanguage(response.data));
+        yield put(setOpenSnackBar("Display language updated"));
     } catch (e) {
         yield put(setUserLoadingStatus(LoadingStatus.ERROR));
     }
@@ -320,7 +338,7 @@ export function* processUserToMuteListRequest({ payload }: ProcessUserToMuteList
         yield put(setMutedToListTweetsState({ userId: payload.userId, tweetId: payload.tweetId!, isUserMuted: data }));
         yield put(setMuted(data));
         yield put(setMutedUser({ userId: payload.userId, isUserMuted: data }));
-        yield put(setMutedUsersState({ userId: payload.userId, isUserMuted: data })); // TODO NOT NEEDED ???
+        yield put(setMutedUsersState({ userId: payload.userId, isUserMuted: data }));
         yield put(setMutedToTweetState(data));
         yield put(setMutedTweetAdditionalInfo(data));
     } catch (e) {
@@ -356,7 +374,8 @@ export function* userSaga() {
     yield takeLatest(UserActionsType.FETCH_READ_MESSAGES, fetchReadMessagesRequest);
     yield takeLatest(UserActionsType.UPDATE_USERNAME, updateUsernameRequest);
     yield takeLatest(UserActionsType.UPDATE_EMAIL, updateEmailRequest);
-    yield takeLatest(UserActionsType.UPDATE_PHONE, updatePhoneRequest);
+    yield takeLatest(UserActionsType.UPDATE_PHONE, updatePhoneNumberRequest);
+    yield takeLatest(UserActionsType.DELETE_PHONE_NUMBER, deletePhoneNumberRequest);
     yield takeLatest(UserActionsType.UPDATE_COUNTRY, updateCountryRequest);
     yield takeLatest(UserActionsType.UPDATE_GENDER, updateGenderRequest);
     yield takeLatest(UserActionsType.UPDATE_LANGUAGE, updateLanguageRequest);

@@ -10,8 +10,9 @@ export interface SettingsRequest {
     username?: string;
     email?: string;
     countryCode?: string;
-    phone?: number;
     country?: string;
+    phoneCode?: string;
+    phoneNumber?: number;
     gender?: string;
     language?: string;
     mutedDirectMessages?: boolean;
@@ -34,7 +35,7 @@ export interface UserActionRequest {
     tweetId?: number;
 }
 
-export interface ChangePhoneResponse {
-    countryCode: string;
-    phone: number;
+export interface UserPhoneResponse {
+    phoneCode: string;
+    phoneNumber: number;
 }

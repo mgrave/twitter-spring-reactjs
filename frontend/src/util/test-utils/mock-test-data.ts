@@ -140,8 +140,9 @@ export const mockUser = {
     "about": "Hello twitter!",
     "website": "https://www.google.com",
     "countryCode": "UA",
-    "phone": 666966623,
-    "country": "UA",
+    "country": "Ukraine",
+    "phoneCode": "+380",
+    "phoneNumber": 666966623,
     "gender": "Cat",
     "language": "Ukrainian - українська",
     "birthday": "Jan 15, 2005",
@@ -159,9 +160,9 @@ export const mockUser = {
     "avatar": "https://twitterclonestorage.s3.eu-central-1.amazonaws.com/348b7dbe-3ac5-477f-8483-edc24f53091b_814370.jpg",
     "wallpaper": "https://twitterclonestorage.s3.eu-central-1.amazonaws.com/d0e5b95f-acc0-47ef-b499-477f7e5a1a06_PrMnWa2z.jpg",
     "pinnedTweetId": 102,
-    "followersSize": 1,
-    "followingSize": 1,
-    "followerRequestsSize": null,
+    "followersCount": 1,
+    "followingCount": 1,
+    "followerRequestsCount": null,
     "unreadMessagesCount": 0,
     "isMutedDirectMessages": false,
     "isPrivateProfile": false
@@ -204,7 +205,7 @@ export const createMockMyProfile = (followersSize: number = 1, followingSize: nu
         "location": "New York",
         "about": "Hello twitter!",
         "website": "https://www.google.com",
-        "country": "UA",
+        "country": "Ukraine",
         "birthday": "Jan 15, 2005",
         "registrationDate": "2021-08-01T23:34:32",
         "tweetCount": 4,
@@ -240,7 +241,7 @@ export const mockMyProfile = {
     "location": "New York",
     "about": "Hello twitter!",
     "website": "https://www.google.com",
-    "country": "UA",
+    "country": "Ukraine",
     "birthday": null,
     "registrationDate": "2021-08-01T23:34:32",
     "tweetCount": 4,
@@ -1304,5 +1305,48 @@ export const countryCodes = [
         "countryCode": "AM",
         "phoneCode": "+374",
         "country": "Armenia"
+    }
+];
+
+export const languages = [
+    {
+        "id": 1,
+        "language": "Arabic - العربية",
+    },
+    {
+        "id": 2,
+        "language": "Arabic (Feminine) - العربية (مؤنث)",
+    },
+    {
+        "id": 3,
+        "language": "Bangla - বাংলা",
+    },
+    {
+        "id": 4,
+        "language": "Basque (beta) - euskara",
+    },
+    {
+        "id": 5,
+        "language": "British English",
+    },
+    {
+        "id": 6,
+        "language": "Bulgarian - български",
+    },
+    {
+        "id": 7,
+        "language": "Catalan - català",
+    },
+    {
+        "id": 8,
+        "language": "Croatian - hrvatski",
+    },
+    {
+        "id": 9,
+        "language": "Czech - čeština",
+    },
+    {
+        "id": 10,
+        "language": "Danish - dansk",
     }
 ];

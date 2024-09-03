@@ -73,8 +73,9 @@ export interface AuthUserResponse {
     about: string;
     website: string;
     countryCode: string;
-    phone: number;
     country: string;
+    phoneCode: string | null;
+    phoneNumber: number | null;
     gender: string;
     language: string;
     birthday: string;
@@ -149,4 +150,9 @@ export interface CountryCodeResponse {
     countryCode: string;
     phoneCode: string;
     country: string;
+}
+
+export interface LanguagesResponse {
+    id: number;
+    language: string;
 }

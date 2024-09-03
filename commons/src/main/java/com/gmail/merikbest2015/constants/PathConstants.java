@@ -45,6 +45,7 @@ public class PathConstants {
     public static final String SUBSCRIBE_USER_ID = "/subscribe/{userId}";
     public static final String PIN_TWEET_ID = "/pin/tweet/{tweetId}";
     public static final String DETAILS_USER_ID = "/details/{userId}";
+    public static final String BATCH_USERS = "/batch/users";
 
     public static final String UI_V1_USER_SETTINGS_UPDATE = UI_V1_USER + "/settings/update";
     public static final String USERNAME = "/username";
@@ -58,6 +59,7 @@ public class PathConstants {
     public static final String COLOR_SCHEME = "/color_scheme";
     public static final String BACKGROUND_COLOR = "/background_color";
     public static final String COUNTRY_CODES = "/country/codes";
+    public static final String LANGUAGES = "/languages";
 
     public static final String API_V1_AUTH = API_V1 + AUTH;
     public static final String USER_EMAIL = "/user/{email}";
