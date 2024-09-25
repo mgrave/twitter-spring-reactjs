@@ -1,8 +1,9 @@
 package com.gmail.merikbest2015.service.impl;
 
+import com.gmail.merikbest2015.constants.TopicErrorMessage;
 import com.gmail.merikbest2015.dto.response.TopicsByCategoriesResponse;
-import com.gmail.merikbest2015.enums.TopicCategory;
-import com.gmail.merikbest2015.exception.ApiRequestException;
+import com.gmail.merikbest2015.commons.enums.TopicCategory;
+import com.gmail.merikbest2015.commons.exception.ApiRequestException;
 import com.gmail.merikbest2015.model.Topic;
 import com.gmail.merikbest2015.model.User;
 import com.gmail.merikbest2015.repository.TopicRepository;
@@ -11,15 +12,13 @@ import com.gmail.merikbest2015.repository.projection.NotInterestedTopicProjectio
 import com.gmail.merikbest2015.repository.projection.TopicProjection;
 import com.gmail.merikbest2015.service.TopicService;
 import com.gmail.merikbest2015.service.UserService;
-import com.gmail.merikbest2015.util.AuthUtil;
+import com.gmail.merikbest2015.commons.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.gmail.merikbest2015.constants.ErrorMessage.TOPIC_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -95,6 +94,6 @@ public class TopicServiceImpl implements TopicService {
 
     private Topic getTopicById(Long topicId) {
         return topicRepository.findById(topicId)
-                .orElseThrow(() -> new ApiRequestException(TOPIC_NOT_FOUND, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ApiRequestException(TopicErrorMessage.TOPIC_NOT_FOUND, HttpStatus.NOT_FOUND));
     }
 }

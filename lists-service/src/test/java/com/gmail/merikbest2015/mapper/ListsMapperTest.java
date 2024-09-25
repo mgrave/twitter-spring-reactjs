@@ -1,23 +1,25 @@
 package com.gmail.merikbest2015.mapper;
 
 import com.gmail.merikbest2015.ListsServiceTestHelper;
-import com.gmail.merikbest2015.dto.HeaderResponse;
+import com.gmail.merikbest2015.commons.dto.HeaderResponse;
+import com.gmail.merikbest2015.commons.mapper.BasicMapper;
+import com.gmail.merikbest2015.constants.ListsSuccessMessage;
 import com.gmail.merikbest2015.dto.request.ListsRequest;
 import com.gmail.merikbest2015.dto.request.UserToListsRequest;
 import com.gmail.merikbest2015.dto.response.BaseListResponse;
 import com.gmail.merikbest2015.dto.response.ListResponse;
 import com.gmail.merikbest2015.dto.response.ListUserResponse;
 import com.gmail.merikbest2015.dto.response.PinnedListResponse;
-import com.gmail.merikbest2015.dto.response.lists.ListMemberResponse;
-import com.gmail.merikbest2015.dto.response.tweet.TweetResponse;
-import com.gmail.merikbest2015.dto.response.user.CommonUserResponse;
+import com.gmail.merikbest2015.commons.dto.response.lists.ListMemberResponse;
+import com.gmail.merikbest2015.commons.dto.response.tweet.TweetResponse;
+import com.gmail.merikbest2015.commons.dto.response.user.CommonUserResponse;
 import com.gmail.merikbest2015.model.User;
 import com.gmail.merikbest2015.repository.projection.BaseListProjection;
 import com.gmail.merikbest2015.repository.projection.ListProjection;
 import com.gmail.merikbest2015.repository.projection.ListUserProjection;
 import com.gmail.merikbest2015.repository.projection.PinnedListProjection;
 import com.gmail.merikbest2015.service.ListsService;
-import com.gmail.merikbest2015.util.TestConstants;
+import com.gmail.merikbest2015.commons.util.TestConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,7 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.gmail.merikbest2015.util.TestConstants.USER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -173,7 +174,7 @@ public class ListsMapperTest {
 
     @Test
     public void addUserToLists() {
-        String mockMessageResponse = "User added to lists success.";
+        String mockMessageResponse = ListsSuccessMessage.USER_ADDED_TO_LISTS;
         UserToListsRequest listsRequest = ListsServiceTestHelper.mockUserToListsRequest();
         when(listsService.addUserToLists(listsRequest)).thenReturn(mockMessageResponse);
         assertEquals(mockMessageResponse, listsMapper.addUserToLists(listsRequest));
@@ -210,7 +211,7 @@ public class ListsMapperTest {
 
     @Test
     public void getListFollowers() {
-        List<User> mockListMemberResponses = new ArrayList<>(List.of(ListsServiceTestHelper.mockUser(USER_ID)));
+        List<User> mockListMemberResponses = new ArrayList<>(List.of(ListsServiceTestHelper.mockUser(TestConstants.USER_ID)));
         when(listsService.getListFollowers(TestConstants.LIST_ID, 1L)).thenReturn(mockListMemberResponses);
         listsMapper.getListFollowers(TestConstants.LIST_ID, 1L);
         verify(listsService, times(1)).getListFollowers(TestConstants.LIST_ID, 1L);
@@ -219,7 +220,7 @@ public class ListsMapperTest {
     @Test
     public void getListMembers() {
         ListMemberResponse listMemberResponse = ListsServiceTestHelper.createMockListMemberResponseList().get(1);
-        User user = ListsServiceTestHelper.mockUser(USER_ID);
+        User user = ListsServiceTestHelper.mockUser(TestConstants.USER_ID);
         List<Map<String, Object>> mockListMemberResponses = List.of(Map.of("user", user, "isMemberInList", false));
         when(listsService.getListMembers(TestConstants.LIST_ID, 1L)).thenReturn(mockListMemberResponses);
         when(basicMapper.convertToResponse(user, ListMemberResponse.class)).thenReturn(listMemberResponse);
@@ -230,7 +231,7 @@ public class ListsMapperTest {
     @Test
     public void searchListMembersByUsername() {
         ListMemberResponse listMemberResponse = ListsServiceTestHelper.createMockListMemberResponseList().get(1);
-        User user = ListsServiceTestHelper.mockUser(USER_ID);
+        User user = ListsServiceTestHelper.mockUser(TestConstants.USER_ID);
         List<Map<String, Object>> mockListMemberResponses = List.of(Map.of("user", user, "isMemberInList", false));
         when(listsService.searchListMembersByUsername(TestConstants.LIST_ID, "test_search")).thenReturn(mockListMemberResponses);
         when(basicMapper.convertToResponse(user, ListMemberResponse.class)).thenReturn(listMemberResponse);

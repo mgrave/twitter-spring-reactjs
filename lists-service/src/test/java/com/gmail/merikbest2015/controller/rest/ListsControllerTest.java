@@ -1,10 +1,14 @@
 package com.gmail.merikbest2015.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gmail.merikbest2015.commons.constants.ErrorMessage;
+import com.gmail.merikbest2015.commons.constants.PathConstants;
+import com.gmail.merikbest2015.constants.ListsErrorMessage;
+import com.gmail.merikbest2015.constants.ListsSuccessMessage;
 import com.gmail.merikbest2015.dto.request.ListsRequest;
 import com.gmail.merikbest2015.dto.request.UserToListsRequest;
-import com.gmail.merikbest2015.enums.ReplyType;
-import com.gmail.merikbest2015.util.TestConstants;
+import com.gmail.merikbest2015.commons.enums.ReplyType;
+import com.gmail.merikbest2015.commons.util.TestConstants;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,12 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
-import static com.gmail.merikbest2015.constants.ErrorMessage.*;
-import static com.gmail.merikbest2015.constants.PathConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,8 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(value = {"/sql-test/clear-lists-db.sql", "/sql-test/populate-lists-db.sql"}, executionPhase = BEFORE_TEST_METHOD)
-@Sql(value = "/sql-test/clear-lists-db.sql", executionPhase = AFTER_TEST_METHOD)
+@Sql(value = {"/sql-test/clear-lists-db.sql", "/sql-test/populate-lists-db.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/sql-test/clear-lists-db.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class ListsControllerTest {
 
     @Autowired
@@ -55,8 +55,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists - Get all tweet lists")
     public void getAllTweetLists() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(7)))
                 .andExpect(jsonPath("$[0].id").value(4L))
@@ -71,8 +71,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/user - Get user tweet lists")
     public void getUserTweetLists() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + USER)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.USER)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(3)))
                 .andExpect(jsonPath("$[0].id").isNotEmpty())
@@ -87,8 +87,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/user/2 - Get user tweet lists by id")
     public void getUserTweetListsById() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + USER_USER_ID, TestConstants.USER_ID)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.USER_USER_ID, TestConstants.USER_ID)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(4L))
@@ -103,8 +103,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/user/consist - Get tweet lists which user in")
     public void getTweetListsWhichUserIn() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + USER_CONSIST)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.USER_CONSIST)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(7L))
@@ -119,8 +119,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/pined - Get user pinned tweet lists")
     public void getUserPinnedLists() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + PINED)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.PINED)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").value(4L))
@@ -133,8 +133,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/4 - Get list by id")
     public void getListById() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(4))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -151,8 +151,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/6 - Get owner private list by id")
     public void getOwnerPrivateListById() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID, 6)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 6)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(6))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -169,8 +169,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/7 - Get followed private list by id")
     public void getFollowedPrivateListById() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID, 7)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 7)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(7))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -187,37 +187,37 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/8 - Not found existing private list by id")
     public void getPrivateListById_NotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID, 8)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 8)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[404] GET /ui/v1/lists/99 - Not found list by id")
     public void getListById_NotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + "/99")
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + "/99")
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[400] GET /ui/v1/lists/10 - Should validate is list author blocked my profile")
     public void getBlockedUserByListId() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID, 10)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 10)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 2))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 2))));
     }
 
     @Test
     @DisplayName("[404] GET /ui/v1/lists/11 - Should validate is list author have private profile")
     public void getPrivateUserProfileByListId() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID, 11)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 11)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(USER_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ErrorMessage.USER_NOT_FOUND)));
     }
 
     @Test
@@ -229,8 +229,8 @@ public class ListsControllerTest {
         listsRequest.setDescription(TestConstants.LIST_DESCRIPTION);
         listsRequest.setAltWallpaper(TestConstants.LIST_ALT_WALLPAPER);
 
-        mockMvc.perform(post(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -251,12 +251,12 @@ public class ListsControllerTest {
         listsRequest.setDescription(TestConstants.LIST_DESCRIPTION);
         listsRequest.setAltWallpaper(TestConstants.LIST_ALT_WALLPAPER);
 
-        mockMvc.perform(post(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(INCORRECT_LIST_NAME_LENGTH)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.INCORRECT_LIST_NAME_LENGTH)));
     }
 
     @Test
@@ -268,12 +268,12 @@ public class ListsControllerTest {
         listsRequest.setDescription(TestConstants.LIST_DESCRIPTION);
         listsRequest.setAltWallpaper(TestConstants.LIST_ALT_WALLPAPER);
 
-        mockMvc.perform(post(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(INCORRECT_LIST_NAME_LENGTH)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.INCORRECT_LIST_NAME_LENGTH)));
     }
 
 //    @Test
@@ -284,8 +284,8 @@ public class ListsControllerTest {
 //        listsRequest.setDescription(TestConstants.LIST_DESCRIPTION);
 //        listsRequest.setAltWallpaper(TestConstants.LIST_ALT_WALLPAPER);
 //
-//        mockMvc.perform(post(UI_V1_LISTS)
-//                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+//        mockMvc.perform(post(PathConstants.UI_V1_LISTS)
+//                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
 //                        .content(mapper.writeValueAsString(listsRequest))
 //                        .contentType(MediaType.APPLICATION_JSON_VALUE))
 //                .andExpect(status().isNotFound())
@@ -301,8 +301,8 @@ public class ListsControllerTest {
         listsRequest.setListName("edited name");
         listsRequest.setDescription("edited description");
 
-        mockMvc.perform(put(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(put(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -327,12 +327,12 @@ public class ListsControllerTest {
         listsRequest.setListName("");
         listsRequest.setDescription("edited description");
 
-        mockMvc.perform(put(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(put(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(INCORRECT_LIST_NAME_LENGTH)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.INCORRECT_LIST_NAME_LENGTH)));
     }
 
     @Test
@@ -344,12 +344,12 @@ public class ListsControllerTest {
         listsRequest.setListName(TestConstants.LINK_DESCRIPTION);
         listsRequest.setDescription("edited description");
 
-        mockMvc.perform(put(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(put(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(INCORRECT_LIST_NAME_LENGTH)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.INCORRECT_LIST_NAME_LENGTH)));
     }
 
     @Test
@@ -361,12 +361,12 @@ public class ListsControllerTest {
         listsRequest.setListName(TestConstants.LIST_DESCRIPTION);
         listsRequest.setDescription("edited description");
 
-        mockMvc.perform(put(UI_V1_LISTS)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(put(PathConstants.UI_V1_LISTS)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(listsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
 //    @Test
@@ -378,8 +378,8 @@ public class ListsControllerTest {
 //        listsRequest.setName(TestConstants.LIST_DESCRIPTION);
 //        listsRequest.setDescription("edited description");
 //
-//        mockMvc.perform(put(UI_V1_LISTS)
-//                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+//        mockMvc.perform(put(PathConstants.UI_V1_LISTS)
+//                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
 //                        .content(mapper.writeValueAsString(listsRequest))
 //                        .contentType(MediaType.APPLICATION_JSON_VALUE))
 //                .andExpect(status().isNotFound())
@@ -389,8 +389,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] DELETE /ui/v1/lists/4 - Delete list")
     public void deleteList() throws Exception {
-        mockMvc.perform(delete(UI_V1_LISTS + LIST_ID, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(delete(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("List id:4 deleted.")));
     }
@@ -398,17 +398,17 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] DELETE /ui/v1/lists/99 - Delete list Should Not found")
     public void deleteList_ShouldNotFound() throws Exception {
-        mockMvc.perform(delete(UI_V1_LISTS + "/99")
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(delete(PathConstants.UI_V1_LISTS + "/99")
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
 //    @Test
 //    @DisplayName("[400] DELETE /ui/v1/lists/5 - Delete another user list Should Not found")
 //    public void deleteAnotherUserList_ShouldNotFound() throws Exception {
-//        mockMvc.perform(delete(UI_V1_LISTS + LIST_ID, 5)
-//                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+//        mockMvc.perform(delete(PathConstants.UI_V1_LISTS + LIST_ID, 5)
+//                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
 //                .andExpect(status().isNotFound())
 //                .andExpect(jsonPath("$", is(LIST_OWNER_NOT_FOUND)));
 //    }
@@ -416,8 +416,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/follow/9 - Follow list")
     public void followList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + FOLLOW_LIST_ID, 9)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.FOLLOW_LIST_ID, 9)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(9))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -431,26 +431,26 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/follow/99 - Should List Not Found by id")
     public void followList_ShouldListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + FOLLOW_LIST_ID, 99)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.FOLLOW_LIST_ID, 99)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[404] GET /ui/v1/lists/follow/8 - Should follow to private List Not Found by id")
     public void followList_ShouldFollowToPrivateListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + FOLLOW_LIST_ID, 8)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.FOLLOW_LIST_ID, 8)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/follow/4 - Unfollow list")
     public void unfollowList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + FOLLOW_LIST_ID, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.FOLLOW_LIST_ID, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(4))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -464,8 +464,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/pin/6 - Pin list")
     public void pinList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + PIN_LIST_ID, 6)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.PIN_LIST_ID, 6)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(6))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -477,8 +477,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/pin/4 - Unpin list")
     public void unpinList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + PIN_LIST_ID, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.PIN_LIST_ID, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(4))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -490,17 +490,17 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/pin/8 - Should pinned list Not Found by id")
     public void pinList_ShouldPinnedListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + PIN_LIST_ID, 8)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.PIN_LIST_ID, 8)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/add/user/1 - Get lists to add user")
     public void getListsToAddUser() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_USER_ID, 1)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_USER_ID, 1)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", Matchers.oneOf(4, 6)))
@@ -516,12 +516,12 @@ public class ListsControllerTest {
     public void addUserToLists() throws Exception {
         createUserToList(1L);
 
-        mockMvc.perform(post(UI_V1_LISTS + ADD_USER)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(userToListsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("User added to lists success."));
+                .andExpect(jsonPath("$").value(ListsSuccessMessage.USER_ADDED_TO_LISTS));
     }
 
     @Test
@@ -529,12 +529,12 @@ public class ListsControllerTest {
     public void addUserToLists_ShouldUserIsBlocked() throws Exception {
         createUserToList(4L);
 
-        mockMvc.perform(post(UI_V1_LISTS + ADD_USER)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(userToListsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 4))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 4))));
     }
 
     @Test
@@ -542,12 +542,12 @@ public class ListsControllerTest {
     public void addUserToLists_ShouldUserHavePrivateProfile() throws Exception {
         createUserToList(3L);
 
-        mockMvc.perform(post(UI_V1_LISTS + ADD_USER)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(userToListsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(USER_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ErrorMessage.USER_NOT_FOUND)));
     }
 
     @Test
@@ -555,19 +555,19 @@ public class ListsControllerTest {
     public void addUserToLists_ShouldUserBlockedMyProfile() throws Exception {
         createUserToList(6L);
 
-        mockMvc.perform(post(UI_V1_LISTS + ADD_USER)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID)
+        mockMvc.perform(post(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID)
                         .content(mapper.writeValueAsString(userToListsRequest))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 2))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 2))));
     }
 
     @Test
     @DisplayName("[200] POST /ui/v1/lists/add/user/1/6 - Add user to list")
     public void addUserToList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_LIST_ID, 1, 6)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_LIST_ID, 1, 6)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(true));
     }
@@ -575,44 +575,44 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[400] POST /ui/v1/lists/add/user/4/6 - Should user is blocked Add users to list")
     public void addUserToList_ShouldUserIsBlocked() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_LIST_ID, 4, 6)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_LIST_ID, 4, 6)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 4))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 4))));
     }
 
     @Test
     @DisplayName("[404] POST /ui/v1/lists/add/user/3/6 - Should user have a private profile")
     public void addUserToList_ShouldUserHavePrivateProfile() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_LIST_ID, 3, 6)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_LIST_ID, 3, 6)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(USER_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ErrorMessage.USER_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[400] POST /ui/v1/lists/add/user/6/6 - Should user blocked my profile")
     public void addUserToList_ShouldUserBlockedMyProfile() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_LIST_ID, 6, 6)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_LIST_ID, 6, 6)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 2))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 2))));
     }
 
     @Test
     @DisplayName("[404] POST /ui/v1/lists/add/user/7/99 - Should list Not Found")
     public void addUserToList_ShouldListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_LIST_ID, 7, 99)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_LIST_ID, 7, 99)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/add/user/1/4 - Remove user from list")
     public void removeUserFromList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + ADD_USER_LIST_ID, 1, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.ADD_USER_LIST_ID, 1, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(false));
     }
@@ -620,8 +620,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/4/tweets - Get tweets by list id")
     public void getTweetsByListId() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_TWEETS, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_TWEETS, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(45L))
@@ -654,17 +654,17 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/5/tweets - Get tweets by other user private list id")
     public void getTweetsByUserPrivateListId() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_TWEETS, 5)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_TWEETS, 5)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/4/details - Get list details")
     public void getListDetails() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_DETAILS, 4)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_DETAILS, 4)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(4))
                 .andExpect(jsonPath("$.listName").value(TestConstants.LIST_NAME))
@@ -681,17 +681,17 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/5/details - Get list details by other user private list")
     public void getListDetailsByUserPrivateList() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_DETAILS, 5)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_DETAILS, 5)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/4/2/followers - Get list followers")
     public void getListFollowers() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_FOLLOWERS, 4, 2)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_FOLLOWERS, 4, 2)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(1L))
@@ -705,35 +705,35 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/99/2/followers - Get list followers should list Not Found")
     public void getListFollowers_ShouldListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_FOLLOWERS, 99, 2)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_FOLLOWERS, 99, 2)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[404] GET /ui/v1/lists/5/1/followers - Get list followers by private list should list Not Found")
     public void getListFollowers_ByPrivateListShouldListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_FOLLOWERS, 5, 1)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_FOLLOWERS, 5, 1)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[400] GET /ui/v1/lists/10/5/followers - Get list followers by blocked user")
     public void getListFollowers_ByBlockedUserAndListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_FOLLOWERS, 10, 5)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_FOLLOWERS, 10, 5)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 2))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 2))));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/4/2/members - Get list members")
     public void getListMembers() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_MEMBERS, 4, 2)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_MEMBERS, 4, 2)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(1L))
@@ -748,8 +748,8 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[200] GET /ui/v1/lists/9/1/members - Get list members by another user")
     public void getListMembersByAnotherUser() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_MEMBERS, 9, 1)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_MEMBERS, 9, 1)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(1L))
@@ -763,35 +763,35 @@ public class ListsControllerTest {
     @Test
     @DisplayName("[404] GET /ui/v1/lists/99/2/members - Get list members should list Not Found")
     public void getListMembers_ShouldListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_MEMBERS, 99, 2)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_MEMBERS, 99, 2)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[404] GET /ui/v1/lists/5/1/members - Get list members by private list should list Not Found")
     public void getListMembers_ByPrivateListShouldListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_MEMBERS, 5, 1)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_MEMBERS, 5, 1)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(LIST_NOT_FOUND)));
+                .andExpect(jsonPath("$", is(ListsErrorMessage.LIST_NOT_FOUND)));
     }
 
     @Test
     @DisplayName("[400] GET /ui/v1/lists/10/5/members - Get list members by blocked user")
     public void getListMembers_ByBlockedUserAndListNotFound() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + LIST_ID_MEMBERS, 10, 5)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.LIST_ID_MEMBERS, 10, 5)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", is(String.format(USER_ID_BLOCKED, 2))));
+                .andExpect(jsonPath("$", is(String.format(ListsErrorMessage.USER_ID_BLOCKED, 2))));
     }
 
     @Test
     @DisplayName("[200] GET /ui/v1/lists/search/2/MrCat - Search list members by username")
     public void searchListMembersByUsername() throws Exception {
-        mockMvc.perform(get(UI_V1_LISTS + SEARCH_LIST_ID, 2, TestConstants.USERNAME)
-                        .header(AUTH_USER_ID_HEADER, TestConstants.USER_ID))
+        mockMvc.perform(get(PathConstants.UI_V1_LISTS + PathConstants.SEARCH_LIST_ID, 2, TestConstants.USERNAME)
+                        .header(PathConstants.AUTH_USER_ID_HEADER, TestConstants.USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(6)))
                 .andExpect(jsonPath("$[0].id").isNotEmpty())

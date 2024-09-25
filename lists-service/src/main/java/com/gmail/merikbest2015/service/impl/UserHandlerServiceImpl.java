@@ -1,17 +1,15 @@
 package com.gmail.merikbest2015.service.impl;
 
-import com.gmail.merikbest2015.event.BlockUserEvent;
-import com.gmail.merikbest2015.event.FollowUserEvent;
-import com.gmail.merikbest2015.event.UpdateUserEvent;
-import com.gmail.merikbest2015.event.UserEvent;
+import com.gmail.merikbest2015.commons.event.BlockUserEvent;
+import com.gmail.merikbest2015.commons.event.FollowUserEvent;
+import com.gmail.merikbest2015.commons.event.UpdateUserEvent;
+import com.gmail.merikbest2015.commons.event.UserEvent;
 import com.gmail.merikbest2015.model.User;
 import com.gmail.merikbest2015.repository.UserRepository;
 import com.gmail.merikbest2015.service.UserHandlerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static java.lang.Long.parseLong;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class UserHandlerServiceImpl implements UserHandlerService {
     public void handleBlockUser(BlockUserEvent blockUserEvent, String authId) {
         User user = userRepository.findById(blockUserEvent.getId())
                 .orElseGet(() -> createUser(blockUserEvent));
-        User authUser = userRepository.findById(parseLong(authId)).get();
+        User authUser = userRepository.findById(Long.parseLong(authId)).get();
 
         if (blockUserEvent.isUserBlocked()) {
             authUser.getUserBlockedList().add(user);
@@ -56,7 +54,7 @@ public class UserHandlerServiceImpl implements UserHandlerService {
     public void handleFollowUser(FollowUserEvent followUserEvent, String authId) {
         User user = userRepository.findById(followUserEvent.getId())
                 .orElseGet(() -> createUser(followUserEvent));
-        User authUser = userRepository.findById(parseLong(authId)).get();
+        User authUser = userRepository.findById(Long.parseLong(authId)).get();
 
         if (followUserEvent.isUserFollow()) {
             authUser.getFollowers().add(user);

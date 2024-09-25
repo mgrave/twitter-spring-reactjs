@@ -1,9 +1,10 @@
 package com.gmail.merikbest2015.controller.api;
 
-import com.gmail.merikbest2015.dto.response.chat.ChatTweetResponse;
-import com.gmail.merikbest2015.dto.HeaderResponse;
-import com.gmail.merikbest2015.dto.request.IdsRequest;
-import com.gmail.merikbest2015.dto.response.tweet.TweetResponse;
+import com.gmail.merikbest2015.commons.dto.HeaderResponse;
+import com.gmail.merikbest2015.commons.dto.request.IdsRequest;
+import com.gmail.merikbest2015.commons.dto.response.chat.ChatTweetResponse;
+import com.gmail.merikbest2015.commons.dto.response.tweet.TweetResponse;
+import com.gmail.merikbest2015.commons.event.UpdateTweetEvent;
 import com.gmail.merikbest2015.mapper.TweetClientMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.gmail.merikbest2015.constants.PathConstants.*;
+import static com.gmail.merikbest2015.commons.constants.PathConstants.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +51,12 @@ public class TweetApiController {
     @GetMapping(CHAT_TWEET_ID)
     public ChatTweetResponse getChatTweet(@PathVariable("tweetId") Long tweetId) {
         return tweetClientMapper.getChatTweet(tweetId);
+    }
+
+    @GetMapping(BATCH_TWEETS)
+    public List<UpdateTweetEvent> getBatchTweets(@RequestParam("period") Integer period,
+                                                 @RequestParam("page") Integer page,
+                                                 @RequestParam("limit") Integer limit) {
+        return tweetClientMapper.getBatchTweets(period, page, limit);
     }
 }

@@ -1,6 +1,6 @@
 package com.gmail.merikbest2015.service.impl;
 
-import com.gmail.merikbest2015.event.*;
+import com.gmail.merikbest2015.commons.event.*;
 import com.gmail.merikbest2015.model.User;
 import com.gmail.merikbest2015.repository.UserRepository;
 import com.gmail.merikbest2015.service.UserHandlerService;
@@ -18,8 +18,8 @@ public class UserHandlerServiceImpl implements UserHandlerService {
 
     @Override
     @Transactional
-    public void handleUpdateUser(UpdateUserEvent updateUserEvent) {
-        userRepository.findById(updateUserEvent.getId())
+    public User handleNewOrUpdateUser(UpdateUserEvent updateUserEvent) {
+        return userRepository.findById(updateUserEvent.getId())
                 .map(user -> {
                     user.setUsername(updateUserEvent.getUsername());
                     user.setFullName(updateUserEvent.getFullName());
