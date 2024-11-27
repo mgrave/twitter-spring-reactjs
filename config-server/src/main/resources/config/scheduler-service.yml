@@ -1,0 +1,47 @@
+server:
+    port: 8009
+spring:
+    application:
+        name: scheduler-service
+    datasource:
+        url: jdbc:postgresql://${DATASOURCE_HOST:localhost}:5432/scheduler
+        username: postgres
+        password: root
+        driverClassName: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+    flyway:
+        locations: classpath:db/migration
+    zipkin:
+        base-url: http://${ZIPKIN_HOST:localhost}:9411
+
+resilience4j:
+    circuitbreaker:
+        instances:
+            tweet-service:
+                minimum-number-of-calls: 5
+            chat-service:
+                minimum-number-of-calls: 5
+            lists-service:
+                minimum-number-of-calls: 5
+            notification-service:
+                minimum-number-of-calls: 5
+            topic-service:
+                minimum-number-of-calls: 5
+
+feign:
+    circuitbreaker:
+        enabled: true
+
+eureka:
+    client:
+        service-url:
+            defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka
+        fetch-registry: true
+        register-with-eureka: true
+    instance:
+        hostname: ${EUREKA_HOST:localhost}

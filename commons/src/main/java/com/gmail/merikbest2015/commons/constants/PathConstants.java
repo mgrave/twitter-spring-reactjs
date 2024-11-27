@@ -167,5 +167,8 @@ public class PathConstants {
     public static final String PHONE_CODE = "/phone/{code}";
     public static final String WALLPAPER = "/wallpaper";
 
+    public static final String SCHEDULER = "/scheduler";
+    public static final String API_V1_SCHEDULER = API_V1 + SCHEDULER;
+
     public static final String API_V1_WEBSOCKET = API_V1 + "/websocket";
 }

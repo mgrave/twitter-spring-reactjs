@@ -1,6 +1,7 @@
 package com.gmail.merikbest2015.batch;
 
 import com.gmail.merikbest2015.client.UserClient;
+import com.gmail.merikbest2015.commons.constants.BatchJobConstants;
 import com.gmail.merikbest2015.commons.event.UpdateUserEvent;
 import com.gmail.merikbest2015.model.User;
 import com.gmail.merikbest2015.service.UserHandlerService;
@@ -24,8 +25,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 public class ImportUserJobConfiguration {
 
-    private static final String JOB_NOME = "importUserJob";
-
     @Value("${batch.chunkSize}")
     private int chunkSize;
 
@@ -37,9 +36,9 @@ public class ImportUserJobConfiguration {
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
-    @Bean(JOB_NOME)
+    @Bean(BatchJobConstants.IMPORT_USER_JOB)
     public Job importUserDataJob(JobRepository jobRepository) {
-        return new JobBuilder(JOB_NOME, jobRepository)
+        return new JobBuilder(BatchJobConstants.IMPORT_USER_JOB, jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(importUserStep(jobRepository))
                 .build();

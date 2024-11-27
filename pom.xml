@@ -32,6 +32,7 @@
         <module>notification-service</module>
         <module>websocket-service</module>
         <module>localization-service</module>
+        <module>scheduler-service</module>
     </modules>
 
     <properties>
