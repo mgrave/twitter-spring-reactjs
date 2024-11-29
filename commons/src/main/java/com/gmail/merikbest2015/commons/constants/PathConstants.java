@@ -169,6 +169,9 @@ public class PathConstants {
 
     public static final String SCHEDULER = "/scheduler";
     public static final String API_V1_SCHEDULER = API_V1 + SCHEDULER;
+    public static final String SERVICE_JOB_ID = "/job/{serviceJobId}";
+    public static final String SERVICE_JOBS = "/jobs";
+    public static final String SERVICE_JOB = "/job";
 
     public static final String API_V1_WEBSOCKET = API_V1 + "/websocket";
 }

@@ -6,5 +6,7 @@ CREATE TABLE service_jobs
     job_name        VARCHAR(255) NOT NULL,
     cron_expression VARCHAR(255) NOT NULL,
     active          BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_at      TIMESTAMP    NOT NULL,
+    updated_at      TIMESTAMP,
     PRIMARY KEY (id)
 );
