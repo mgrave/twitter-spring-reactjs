@@ -101,6 +101,12 @@ spring:
                     predicates:
                         - Path=/ui/v1/localization/**
 
+                -   id: scheduler-service
+                    uri: lb://scheduler-service
+                    predicates:
+                        - Path=/api/v1/scheduler/**
+                    filters:
+                        - AuthFilter
     zipkin:
         base-url: http://${ZIPKIN_HOST:localhost}:9411
 
