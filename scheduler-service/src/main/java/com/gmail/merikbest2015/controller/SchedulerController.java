@@ -44,4 +44,10 @@ public class SchedulerController {
     public ResponseEntity<TriggerResponse> updateJob(@RequestBody JobRequest jobRequest) {
         return ResponseEntity.ok(schedulerMapper.updateJob(jobRequest));
     }
+
+    @DeleteMapping(PathConstants.JOBS_DELETE)
+    public ResponseEntity<String> deleteJob(@PathVariable("jobName") String jobName,
+                                            @PathVariable("groupName") String groupName) {
+        return ResponseEntity.ok(schedulerMapper.deleteJob(jobName, groupName));
+    }
 }

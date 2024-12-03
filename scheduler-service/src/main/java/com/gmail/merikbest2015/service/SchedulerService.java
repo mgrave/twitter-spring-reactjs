@@ -12,4 +12,5 @@ public interface SchedulerService {
     List<? extends Trigger> getJobTriggers(String jobName, String groupName);
     Trigger createJob(JobRequest jobRequest);
     Trigger updateJob(JobRequest jobRequest);
+    String deleteJob(String jobName, String groupName);
 }

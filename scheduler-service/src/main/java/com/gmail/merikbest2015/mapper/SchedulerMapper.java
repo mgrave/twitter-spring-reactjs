@@ -66,4 +66,8 @@ public class SchedulerMapper {
                 .cronExpression(cronTrigger.getCronExpression())
                 .build();
     }
+
+    public String deleteJob(String jobName, String groupName) {
+        return schedulerService.deleteJob(jobName, groupName);
+    }
 }

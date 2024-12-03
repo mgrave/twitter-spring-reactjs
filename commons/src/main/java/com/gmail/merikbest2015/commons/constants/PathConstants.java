@@ -174,6 +174,7 @@ public class PathConstants {
     public static final String JOBS_TRIGGERS_NAME_GROUP_NAME = JOBS + "/triggers/{jobName}/{groupName}";
     public static final String JOBS_CREATE = JOBS + "/create";
     public static final String JOBS_UPDATE = JOBS + "/update";
+    public static final String JOBS_DELETE = JOBS + "/delete/{jobName}/{groupName}";
     public static final String USER_BATCH_JOB = "/user/batch/job";
 
     public static final String API_V1_WEBSOCKET = API_V1 + "/websocket";

@@ -2,6 +2,7 @@ package com.gmail.merikbest2015.service.impl;
 
 import com.gmail.merikbest2015.commons.exception.ApiRequestException;
 import com.gmail.merikbest2015.constants.SchedulerErrorMessage;
+import com.gmail.merikbest2015.constants.SchedulerSuccessMessage;
 import com.gmail.merikbest2015.dto.request.JobRequest;
 import com.gmail.merikbest2015.service.SchedulerService;
 import com.gmail.merikbest2015.service.job.JobClassRegistry;
@@ -71,9 +72,7 @@ public class SchedulerServiceImpl implements SchedulerService {
                 .withIdentity(jobKey)
                 .storeDurably()
                 .build();
-        CronScheduleBuilder cronSchedule = CronScheduleBuilder.cronSchedule(jobRequest.getCronExpression())
-                .withMisfireHandlingInstructionDoNothing()
-                .inTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC));
+        CronScheduleBuilder cronSchedule = getCronSchedule(jobRequest.getCronExpression());
         Trigger trigger = TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
                 .withIdentity(jobKey.getName(), jobRequest.getGroupName())
@@ -92,9 +91,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         JobKey jobKey = new JobKey(jobClass.getSimpleName(), jobRequest.getGroupName());
         validateJobKey(jobKey);
         TriggerKey triggerKey = new TriggerKey(jobKey.getName(), jobRequest.getGroupName());
-        CronScheduleBuilder cronSchedule = CronScheduleBuilder.cronSchedule(jobRequest.getCronExpression())
-                .withMisfireHandlingInstructionDoNothing()
-                .inTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC));
+        CronScheduleBuilder cronSchedule = getCronSchedule(jobRequest.getCronExpression());
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity(jobKey.getName(), jobRequest.getGroupName())
                 .withSchedule(cronSchedule)
@@ -104,10 +101,26 @@ public class SchedulerServiceImpl implements SchedulerService {
         return trigger;
     }
 
+    @Override
+    @Transactional
+    @SneakyThrows
+    public String deleteJob(String jobName, String groupName) {
+        JobKey jobKey = new JobKey(jobName, groupName);
+        validateJobKey(jobKey);
+        scheduler.deleteJob(jobKey);
+        return SchedulerSuccessMessage.JOB_DELETED;
+    }
+
     @SneakyThrows
     private void validateJobKey(JobKey jobKey) {
         if (!scheduler.checkExists(jobKey)) {
             throw new ApiRequestException(SchedulerErrorMessage.JOB_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
+    }
+
+    private static CronScheduleBuilder getCronSchedule(String cronExpression) {
+        return CronScheduleBuilder.cronSchedule(cronExpression)
+                .withMisfireHandlingInstructionDoNothing()
+                .inTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC));
     }
 }
