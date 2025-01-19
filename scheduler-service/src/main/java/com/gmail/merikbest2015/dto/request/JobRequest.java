@@ -2,9 +2,15 @@ package com.gmail.merikbest2015.dto.request;
 
 import com.gmail.merikbest2015.constants.SchedulerErrorMessage;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class JobRequest {
 
     @NotBlank(message = SchedulerErrorMessage.EMPTY_JOB_NAME)

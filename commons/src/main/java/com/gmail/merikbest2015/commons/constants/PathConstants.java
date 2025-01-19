@@ -112,7 +112,9 @@ public class PathConstants {
     public static final String API_V1_EMAIL = API_V1 + "/email";
     public static final String SUGGESTED = "/suggested";
 
-    public static final String UI_V1_TOPICS = UI_V1 + "/topics";
+    public static final String TOPICS = "/topics";
+    public static final String UI_V1_TOPICS = UI_V1 + TOPICS;
+    public static final String API_V1_TOPICS = API_V1 + TOPICS;
     public static final String CATEGORY = "/category";
     public static final String FOLLOWED = "/followed";
     public static final String FOLLOWED_USER_ID = "/followed/{userId}";
@@ -138,7 +140,9 @@ public class PathConstants {
     public static final String LIST_ID_MEMBERS = "/{listId}/{listOwnerId}/members";
     public static final String SEARCH_LIST_ID = "/search/{listId}/{username}";
 
-    public static final String UI_V1_CHAT = UI_V1 + "/chat";
+    public static final String CHAT = "/chat";
+    public static final String UI_V1_CHAT = UI_V1 + CHAT;
+    public static final String API_V1_CHAT = API_V1 + CHAT;
     public static final String CHAT_ID = "/{chatId}";
     public static final String USERS = "/users";
     public static final String CREATE_USER_ID = "/create/{userId}";
