@@ -1,0 +1,48 @@
+server:
+    port: 8009
+spring:
+    application:
+        name: scheduler-service
+    datasource:
+        url: jdbc:postgresql://${DATASOURCE_HOST:localhost}:5432/scheduler-test
+        username: postgres
+        password: root
+        driverClassName: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+    quartz:
+        job-store-type: jdbc
+        jdbc:
+            initialize-schema: never
+        properties:
+            org:
+                quartz:
+                    scheduler:
+                        instanceId: auto
+                    jobStore:
+                        driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+                        useProperties: false
+                        tablePrefix: qrtz_
+                        clusterCheckinInterval: 5000
+                        isClustered: true
+                    threadPool:
+                        class: org.quartz.simpl.SimpleThreadPool
+                        threadCount: 10
+                        threadsInheritContextClassLoaderOfInitializingThread: true
+    sql:
+        init:
+            mode: always
+            data-locations: classpath:sql-test/clear-scheduler-db.sql, classpath:sql-test/populate-scheduler-db.sql
+
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+        fetch-registry: true
+        register-with-eureka: true
+    instance:
+        hostname: localhost
