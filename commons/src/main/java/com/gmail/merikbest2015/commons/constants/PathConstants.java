@@ -170,6 +170,9 @@ public class PathConstants {
     public static final String WALLPAPERS = "/wallpapers";
     public static final String PHONE_CODE = "/phone/{code}";
     public static final String WALLPAPER = "/wallpaper";
+    public static final String TRANSLATION = "/translation";
+    public static final String TRANSLATION_KEY = "/{translationKey}";
+    public static final String TRANSLATIONS = "/translations";
 
     public static final String SCHEDULER = "/scheduler";
     public static final String API_V1_SCHEDULER = API_V1 + SCHEDULER;
