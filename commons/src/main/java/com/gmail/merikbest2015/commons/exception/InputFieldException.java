@@ -1,4 +1,4 @@
-package com.gmail.merikbest2015.exception;
+package com.gmail.merikbest2015.commons.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class InputFieldException extends RuntimeException {
         this.status = status;
         this.errorsMap = errorsMap;
     }
-    
+
     private Map<String, String> handleErrors(BindingResult bindingResult) {
         Map<String, String> errors = new HashMap<>();
         bindingResult.getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));

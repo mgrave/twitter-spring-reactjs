@@ -1,8 +1,8 @@
 package com.gmail.merikbest2015.service.util;
 
 import com.gmail.merikbest2015.commons.exception.ApiRequestException;
+import com.gmail.merikbest2015.commons.exception.InputFieldException;
 import com.gmail.merikbest2015.constants.UserErrorMessage;
-import com.gmail.merikbest2015.exception.InputFieldException;
 import com.gmail.merikbest2015.model.User;
 import com.gmail.merikbest2015.repository.BlockUserRepository;
 import com.gmail.merikbest2015.repository.FollowerUserRepository;

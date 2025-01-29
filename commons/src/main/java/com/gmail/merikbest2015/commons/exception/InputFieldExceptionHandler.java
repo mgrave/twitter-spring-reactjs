@@ -1,4 +1,4 @@
-package com.gmail.merikbest2015.exception;
+package com.gmail.merikbest2015.commons.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,7 +12,7 @@ public class InputFieldExceptionHandler {
     @ExceptionHandler(InputFieldException.class)
     public ResponseEntity<Map<String, String>> handleInputFieldException(InputFieldException exception) {
         InputFieldException inputFieldException;
-        
+
         if (exception.getBindingResult() != null) {
             inputFieldException = new InputFieldException(exception.getBindingResult());
         } else {
