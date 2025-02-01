@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useState } from "react";
+import React, { FC, ReactElement, useEffect, useState, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { Stomp } from "@stomp/stompjs";
@@ -8,6 +8,7 @@ import { MuiThemeProvider, Theme } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import { ThemeOptions } from "@material-ui/core/styles/createTheme";
 import { deepmerge } from "@mui/utils";
+import { I18nextProvider } from "react-i18next";
 
 import Authentication from "./pages/Authentication/Authentication";
 import Home from "./pages/Home/Home";
@@ -96,6 +97,8 @@ import {
 } from "./constants/ws-constants";
 import { BACKGROUND, COLOR, TOKEN } from "./constants/common-constants";
 import { setUpdatedListTweet, setVoteListTweet } from "./store/ducks/list/actionCreators";
+import Spinner from "./components/Spinner/Spinner";
+import i18n from './i18n';
 
 const App: FC = (): ReactElement => {
     const history = useHistory();
@@ -225,47 +228,51 @@ const App: FC = (): ReactElement => {
     };
 
     return (
-        <MuiThemeProvider theme={createTheme(deepmerge(theme, colorScheme))}>
-            <CssBaseline />
-            <div className="App">
-                <Layout changeBackgroundColor={changeBackgroundColor} changeColorScheme={changeColorScheme}>
-                    <Switch location={background || location}>
-                        <Route path={ACCOUNT_SIGNIN} component={Authentication} exact />
-                        <Route path={ACCOUNT_LOGIN} component={Login} exact />
-                        <Route path={ACCOUNT_FORGOT} component={ForgotPassword} />
-                        <Route path={HOME} component={Home} exact />
-                        <Route path={HOME_CONNECT} component={Connect} exact />
-                        <Route path={HOME_TRENDS} component={Trends} exact />
-                        <Route path={`${HOME_TWEET}/:id`} component={FullTweet} exact />
-                        <Route path={SEARCH} component={Explore} />
-                        <Route path={NOTIFICATIONS} component={Notifications} />
-                        <Route path={NOTIFICATIONS_TIMELINE} component={NotificationsTimeline} exact />
-                        <Route path={`${NOTIFICATION}/:id`} component={NotificationInfo} exact />
-                        <Route path={MESSAGES} component={Messages} />
-                        <Route path={SETTINGS}
-                               render={() => <Settings
-                                   changeBackgroundColor={changeBackgroundColor}
-                                   changeColorScheme={changeColorScheme} />
-                               } />
-                        <Route path={BOOKMARKS} component={Bookmarks} />
-                        <Route path={`${TOPICS}/:topics`} component={Topics} />
-                        <Route path={`${QUOTES}/:tweetId`} component={QuoteTweets} />
-                        <Route path={SUGGESTED} component={SuggestedLists} />
-                        <Route path={LISTS} component={Lists} exact />
-                        <Route path={`${LISTS_MEMBERSHIPS}/:id`} component={ListsMemberships} exact />
-                        <Route path={`${LISTS}/:listId`} component={FullList} exact />
-                        <Route path={`${PROFILE}/:userId`} component={UserPage} exact />
-                        <Route path={`${PROFILE}/:userId${TOPICS}`} component={UserTopics} exact />
-                        <Route path={`${USER_FOLLOWERS_YOU_FOLLOW}/:id`} component={FollowersYouKnow} exact />
-                        <Route path={`${USER}/:id/:follow`} component={FollowingFollowers} exact />
-                    </Switch>
-                    {background && <Route path={`${MODAL}/:id`} children={<TweetImageModal />} />}
-                    {background && <Route path={`${PROFILE_PHOTO}/:id`} children={<UserImageModal />} />}
-                    {background && <Route path={`${PROFILE_HEADER_PHOTO}/:id`} children={<UserImageModal />} />}
-                </Layout>
-                <ActionSnackbar />
-            </div>
-        </MuiThemeProvider>
+        <I18nextProvider i18n={i18n} defaultNS={"translation"}>
+            <Suspense fallback={<Spinner />}>
+                <MuiThemeProvider theme={createTheme(deepmerge(theme, colorScheme))}>
+                    <CssBaseline />
+                    <div className="App">
+                        <Layout changeBackgroundColor={changeBackgroundColor} changeColorScheme={changeColorScheme}>
+                            <Switch location={background || location}>
+                                <Route path={ACCOUNT_SIGNIN} component={Authentication} exact />
+                                <Route path={ACCOUNT_LOGIN} component={Login} exact />
+                                <Route path={ACCOUNT_FORGOT} component={ForgotPassword} />
+                                <Route path={HOME} component={Home} exact />
+                                <Route path={HOME_CONNECT} component={Connect} exact />
+                                <Route path={HOME_TRENDS} component={Trends} exact />
+                                <Route path={`${HOME_TWEET}/:id`} component={FullTweet} exact />
+                                <Route path={SEARCH} component={Explore} />
+                                <Route path={NOTIFICATIONS} component={Notifications} />
+                                <Route path={NOTIFICATIONS_TIMELINE} component={NotificationsTimeline} exact />
+                                <Route path={`${NOTIFICATION}/:id`} component={NotificationInfo} exact />
+                                <Route path={MESSAGES} component={Messages} />
+                                <Route path={SETTINGS}
+                                       render={() => <Settings
+                                           changeBackgroundColor={changeBackgroundColor}
+                                           changeColorScheme={changeColorScheme} />
+                                       } />
+                                <Route path={BOOKMARKS} component={Bookmarks} />
+                                <Route path={`${TOPICS}/:topics`} component={Topics} />
+                                <Route path={`${QUOTES}/:tweetId`} component={QuoteTweets} />
+                                <Route path={SUGGESTED} component={SuggestedLists} />
+                                <Route path={LISTS} component={Lists} exact />
+                                <Route path={`${LISTS_MEMBERSHIPS}/:id`} component={ListsMemberships} exact />
+                                <Route path={`${LISTS}/:listId`} component={FullList} exact />
+                                <Route path={`${PROFILE}/:userId`} component={UserPage} exact />
+                                <Route path={`${PROFILE}/:userId${TOPICS}`} component={UserTopics} exact />
+                                <Route path={`${USER_FOLLOWERS_YOU_FOLLOW}/:id`} component={FollowersYouKnow} exact />
+                                <Route path={`${USER}/:id/:follow`} component={FollowingFollowers} exact />
+                            </Switch>
+                            {background && <Route path={`${MODAL}/:id`} children={<TweetImageModal />} />}
+                            {background && <Route path={`${PROFILE_PHOTO}/:id`} children={<UserImageModal />} />}
+                            {background && <Route path={`${PROFILE_HEADER_PHOTO}/:id`} children={<UserImageModal />} />}
+                        </Layout>
+                        <ActionSnackbar />
+                    </div>
+                </MuiThemeProvider>
+            </Suspense>
+        </I18nextProvider>
     );
 };
 

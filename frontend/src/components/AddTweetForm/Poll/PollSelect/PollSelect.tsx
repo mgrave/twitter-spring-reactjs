@@ -25,7 +25,7 @@ const PollSelect: FC<PollDaySelectProps> = memo(({ id, title, value, width, marg
 
     const showOptions = (value: number): ReactNode[] => {
         const start = value === 7 ? 1 : 0;
-        let options = [];
+        let options: JSX.Element[] = [];
 
         for (let i = start; i <= value; i++) {
             options.push(<option key={i} value={i}>{i}</option>);

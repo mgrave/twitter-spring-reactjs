@@ -44,7 +44,7 @@ const RegistrationModal: FC = (): ReactElement => {
     };
 
     const showDays = (): ReactNode[] => {
-        let days = [];
+        let days: JSX.Element[] = [];
 
         for (let i = 1; i <= 31; i++) {
             days.push(<option key={i} value={i}>{i}</option>);
@@ -53,7 +53,7 @@ const RegistrationModal: FC = (): ReactElement => {
     };
 
     const showYears = (): ReactNode[] => {
-        let years = [];
+        let years: JSX.Element[] = [];
 
         for (let i = 2021; i >= 1901; i--) {
             years.push(<option key={i} value={i}>{i}</option>);

@@ -110,7 +110,7 @@ const ScheduleModal: FC<ScheduleModalProps> = ({ visible, onClose, onOpenUnsentT
     };
 
     const showDays = (): ReactNode[] => {
-        let days = [];
+        let days: JSX.Element[] = [];
 
         for (let i = 1; i <= 28; i++) {
             const value = i < 10 ? "0" + i : i;
@@ -120,7 +120,7 @@ const ScheduleModal: FC<ScheduleModalProps> = ({ visible, onClose, onOpenUnsentT
     };
 
     const showHour = (): ReactNode[] => {
-        let days = [];
+        let days: JSX.Element[] = [];
 
         for (let i = 0; i < 24; i++) {
             const value = i < 10 ? "0" + i : i;
@@ -130,7 +130,7 @@ const ScheduleModal: FC<ScheduleModalProps> = ({ visible, onClose, onOpenUnsentT
     };
 
     const showMinute = (): ReactNode[] => {
-        let days = [];
+        let days: JSX.Element[] = [];
 
         for (let i = 0; i < 60; i++) {
             const value = i < 10 ? "0" + i : i;

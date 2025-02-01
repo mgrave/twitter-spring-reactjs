@@ -20,3 +20,23 @@ export interface WallpaperResponse {
     id: number;
     src: string;
 }
+
+export interface TranslationResponse {
+    id: number;
+    translationKey: string;
+    translationValues: TranslationValueResponse[]
+}
+
+export interface TranslationValueResponse {
+    id: number;
+    languageCode: LanguageCode;
+    value: string;
+}
+
+export enum LanguageCode {
+    EN = "EN",
+    ES = "ES",
+    DE = "DE",
+    FR = "FR",
+    IT = "IT"
+}
